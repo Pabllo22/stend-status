@@ -32,9 +32,13 @@ function App() {
   }, []);
 
   const handleCircuitToggle = async (circuitId: string) => {
-    await toggleCircuit(circuitId);
-    const circuitsData = await getCircuits();
-    setCircuits(circuitsData);
+    try {
+      await toggleCircuit(circuitId);
+      const circuitsData = await getCircuits();
+      setCircuits(circuitsData);
+    } catch (error) {
+      console.error('Ошибка переключения контура:', error);
+    }
   };
 
   const handleCircuitDrop = async (circuitId: string, userId: string | null) => {

@@ -81,14 +81,19 @@ export async function toggleStand(standId: string) {
 }
 
 export async function toggleCircuit(circuitId: string) {
-  const { data: circuit } = await supabase.from('circuits').select('*').eq('id', circuitId).single();
+  const { data: circuit, error: fetchError } = await supabase.from('circuits').select('*').eq('id', circuitId).single();
+  if (fetchError) {
+    console.error('Ошибка получения контура:', fetchError);
+    return;
+  }
   if (!circuit) return;
 
   const newIsOccupied = !circuit.isOccupied;
+  // Если освобождаем контур, очищаем userId и taskNumber
   const userId = newIsOccupied ? circuit.userId : null;
   const taskNumber = newIsOccupied ? circuit.taskNumber : null;
 
-  await supabase
+  const { error: updateError } = await supabase
     .from('circuits')
     .update({ 
       isOccupied: newIsOccupied,
@@ -96,6 +101,11 @@ export async function toggleCircuit(circuitId: string) {
       taskNumber
     })
     .eq('id', circuitId);
+
+  if (updateError) {
+    console.error('Ошибка обновления контура:', updateError);
+    throw updateError;
+  }
 }
 
 export async function toggleCircuitActive(circuitId: string) {

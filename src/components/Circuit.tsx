@@ -52,15 +52,12 @@ export default function CircuitComponent({ circuit, onToggle, onTaskNumberChange
     }
   };
 
-  const handleOccupiedToggleClick = (e: React.MouseEvent) => {
-    if (disabled || !isActive) return;
+  const handleOccupiedToggle = (e: React.ChangeEvent<HTMLInputElement> | React.MouseEvent) => {
+    e.preventDefault();
     e.stopPropagation();
-    onToggle(circuit.id);
-  };
-
-  const handleOccupiedToggleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (disabled || !isActive) return;
-    e.stopPropagation();
+    if (disabled || !isActive) {
+      return;
+    }
     onToggle(circuit.id);
   };
 
@@ -120,11 +117,12 @@ export default function CircuitComponent({ circuit, onToggle, onTaskNumberChange
           {user.name}
         </div>
       )}
-      <label className="circuit-toggle-switch" onClick={handleOccupiedToggleClick}>
+      <label className="circuit-toggle-switch">
         <input
           type="checkbox"
           checked={isOccupied}
-          onChange={handleOccupiedToggleChange}
+          onChange={handleOccupiedToggle}
+          onClick={handleOccupiedToggle}
           disabled={disabled || !isActive}
         />
         <span className="toggle-slider"></span>
