@@ -1,73 +1,89 @@
-# React + TypeScript + Vite
+# Статус Стендов (Stend Status)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Приложение для управления занятостью тестовых контуров стендов.
 
-Currently, two official plugins are available:
+## Возможности
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 📊 Управление 4 проектами: Meetups, Career, Edu, Sprint Offer
+- 🔌 По 2 контура (Test 1, Test 2) на каждый стенд
+- 👥 Управление пользователями (добавление, удаление)
+- 🎯 Назначение пользователей на контуры через drag-and-drop
+- 📝 Ввод номера задачи для каждого контура
+- 🔄 Переключение состояния стендов и контуров
+- 💾 Два режима хранения данных:
+  - **Локальный** (по умолчанию) - данные в localStorage браузера
+  - **Supabase** - общая база данных для всех пользователей
 
-## React Compiler
+## Быстрый старт
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+### Локальный режим (по умолчанию)
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Данные будут храниться в localStorage браузера каждого пользователя отдельно.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Общая база данных (Supabase)
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Для использования общей базы данных для всех пользователей:
+
+1. Следуйте инструкциям в `SUPABASE_SETUP.md`
+2. Выполните переключение по инструкции в `SWITCH_TO_SUPABASE.md`
+
+## Установка
+
+```bash
+npm install
 ```
+
+## Разработка
+
+```bash
+npm run dev
+```
+
+## Сборка
+
+```bash
+npm run build
+```
+
+## Деплой на Netlify
+
+1. Подключите репозиторий к Netlify
+2. Для локального режима - ничего дополнительного не требуется
+3. Для Supabase режима - добавьте переменные окружения:
+   - `VITE_SUPABASE_URL`
+   - `VITE_SUPABASE_ANON_KEY`
+
+Файл `_redirects` уже настроен для корректной работы SPA.
+
+## Структура проекта
+
+```
+src/
+├── db/
+│   ├── database.ts          # Локальная база (SQLite в браузере)
+│   ├── supabase.ts          # Конфигурация Supabase
+│   └── supabaseDatabase.ts  # Функции для работы с Supabase
+├── components/
+│   ├── Stand.tsx            # Компонент стенда
+│   ├── Circuit.tsx          # Компонент контура
+│   └── UserList.tsx         # Список пользователей
+└── App.tsx                  # Главный компонент
+```
+
+## Документация
+
+- `SUPABASE_SETUP.md` - Настройка Supabase
+- `SWITCH_TO_SUPABASE.md` - Переключение на Supabase
+
+## Технологии
+
+- React 19
+- TypeScript
+- Vite
+- SQL.js (для локального режима)
+- Supabase (для общей базы данных)
