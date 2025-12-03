@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Circuit, getUserById } from '../db/database';
+import type { Circuit } from '../db/database';
+import { getUserById } from '../db/database';
 
 interface CircuitProps {
   circuit: Circuit;
@@ -43,7 +44,13 @@ export default function CircuitComponent({ circuit, onToggle, onTaskNumberChange
     }
   };
 
-  const handleOccupiedToggle = (e: React.MouseEvent) => {
+  const handleOccupiedToggleClick = (e: React.MouseEvent) => {
+    if (disabled || !isActive) return;
+    e.stopPropagation();
+    onToggle(circuit.id);
+  };
+
+  const handleOccupiedToggleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (disabled || !isActive) return;
     e.stopPropagation();
     onToggle(circuit.id);
@@ -105,11 +112,11 @@ export default function CircuitComponent({ circuit, onToggle, onTaskNumberChange
           {user.name}
         </div>
       )}
-      <label className="circuit-toggle-switch" onClick={handleOccupiedToggle}>
+      <label className="circuit-toggle-switch" onClick={handleOccupiedToggleClick}>
         <input
           type="checkbox"
           checked={isOccupied}
-          onChange={handleOccupiedToggle}
+          onChange={handleOccupiedToggleChange}
           disabled={disabled || !isActive}
         />
         <span className="toggle-slider"></span>
